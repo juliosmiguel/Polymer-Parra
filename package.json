@@ -1,0 +1,32 @@
+{
+  "name": "jp_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "polymer test",
+    "start": "run-p serve mocks",
+    "serve": "polymer serve --entrypoint index.html",
+    "mocks": "json-server --watch db.json",
+    "build": "polymer build",
+    "lint": "polymer lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juliosmiguel/Polymer-Parra.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/juliosmiguel/Polymer-Parra/issues"
+  },
+  "homepage": "https://github.com/juliosmiguel/Polymer-Parra#readme",
+  "devDependencies": {
+    "json-server": "^0.12.2",
+    "npm-run-all": "^4.1.2",
+    "polymer-cli": "^1.6.0"
+  },
+  "dependencies": {
+    "director": "^1.2.8"
+  }
+}
