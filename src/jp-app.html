@@ -1,13 +1,11 @@
-<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="./styleguide/jp-styleguide.html">
+<link rel="import" href="./core/components/jp-config.html">
+<link rel="import" href="./login/jp-app-login.html">
 
 <dom-module id="jp-app">
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>Hello [[prop1]]!</h2>
+    <jp-app-login></jp-app-login>
   </template>
 
   <script>
@@ -17,14 +15,7 @@
      */
     class JpApp extends Polymer.Element {
       static get is() { return 'jp-app'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'jp-app'
-          }
-        };
-      }
+      static get properties() {}
     }
 
     window.customElements.define(JpApp.is, JpApp);

@@ -1,0 +1,19 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+
+<dom-module id="jp-app-login">
+    <template>
+        <div>
+            <paper-input label="Usuario"></paper-input>
+            <paper-input label="Password" type="password"></paper-input>
+        </div>
+    </template>
+    <script>
+        class JpAppLogin extends Polymer.Element {
+            static get is(){ return 'jp-app-login';}
+            static get properties(){}
+        }
+
+        window.customElements.define(JpAppLogin.is, JpAppLogin);
+    </script>
+</dom-module>

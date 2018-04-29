@@ -1,0 +1,38 @@
+<link rel="import" href="/bower_components/polymer/lib/elements/custom-style.html">
+<custom-style>
+    <style>
+        /* Breackpoints: 320px:16px, 768px: 18px, 992px:20px */
+
+        /*
+         * This technique is know as fluid typography, it will
+         * scale our HTML font size based on the view width and
+         * some measurements we previously specified, for calculating
+         * the function there is a sass mixin called `poly-fluid-sizing`
+         * 
+         * For more information and resources visit:
+         * https://fluid-css.herokuapp.com
+         */
+
+        html {
+            font-size: 16px;
+        }
+
+        @media (min-width:320px) {
+            html {
+                font-size: calc(.44643vw + 14.57143px);
+            }
+        }
+
+        @media (min-width:768px) {
+            html {
+                font-size: calc(.89286vw + 11.14286px);
+            }
+        }
+
+        @media (min-width:992px) {
+            html {
+                font-size: 20px;
+            }
+        }
+    </style>
+</custom-style>
