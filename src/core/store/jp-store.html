@@ -1,0 +1,130 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<dom-module id="jp-store">
+    <script>
+        (function(){
+            let instance = null;
+            class JpStore extends Polymer.Element{
+                static get is(){return "jp-store";}
+                static get properties(){
+                    return {
+                        state:{
+                            type: Object,
+                            value: ()=>({})
+                        },
+
+                        _subscribers: {
+                            type: Array,
+                            value: () => []
+                        }
+                    };
+                }
+
+                constructor(){
+                    super();
+                    if(!instance)
+                        instance = this;
+                }
+
+                static get observers(){
+                    return [
+                        '_changeUserLogin(state.user.*)'
+                    ]
+                }
+
+                register(subscriber){
+                    instance._subscribers.push(subscriber);
+                    subscriber.set('state',instance.state);
+                }
+
+                unregister(subscriber){
+                    var index = instance._subscribers.indexof(subscriber);
+                    if(index >= 0){
+                        instance._subscribers.splice(index,1);
+                    }
+                }
+
+                _changeUserLogin(change){
+                    change && instance._subscribers.map((subscriber)=>{
+                        subscriber.notifyPath(change.path);
+                    });
+                }
+            }
+
+            customElements.define(JpStore.is, JpStore);
+
+             /**
+            * All elements that want to subscribe to the store 
+            * must implement this mixin.
+            */
+            JpStoreMixin = (superClass) => {
+                return class extends superClass {
+                    static get properties() {
+                        return {
+                            entity: String,
+                            state: Object,
+                        };
+                    }
+                    ready() {
+                        super.ready();
+                        this._createPropertyForEntity();
+                    }
+                    connectedCallback() {
+                        super.connectedCallback();
+                        this._checkForInstance();
+                        instance.register(this);
+                    }
+                    disconnectedCallback() {
+                        super.disconnectedCallback();
+                        instance.unregister(this);
+                    }
+                    /**
+                    * Utility method to propate changes into the
+                    * state inside the entity, a subPath can be
+                    * specified for really concrete changes.
+                    */
+                    save(value, subPath) {
+                        const path = subPath
+                            ? `state.${this.entity}.${path}`
+                            : `state.${this.entity}`;
+                        this.set(path, value);
+                    }
+                    /**
+                    * Creates a computed and notifying property that
+                    * will observe all changes in state.entity
+                    * so we just need to worry about our entity.
+                    */
+                    _createPropertyForEntity() {
+                        this._createNotifyingProperty(this.entity);
+                        this._createComputedProperty(
+                            this.entity,
+                            `_getFromState(state.${this.entity}.*)`,
+                            true
+                        );
+                    }
+                    /**
+                    * Always return the full entity, no matter
+                    * what the change is.
+                    */
+                    _getFromState() {
+                        //if(!this.state || !this.state[this.entity])
+                        //    return;
+                        return this.state[this.entity];
+                    }
+                    /**
+                    * If by any change the instance has not been
+                    * initialized when an element tries to register
+                    * we create a new one and add it to the dom so 
+                    * it gets created.
+                    */
+                    _checkForInstance() {
+                        if (!instance) {
+                            document.body.appendChild(
+                                document.createElement(PsStore.is)
+                            );
+                        }
+                    }
+                }
+            }
+        })();
+    </script>
+</dom-module>

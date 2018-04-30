@@ -3,9 +3,9 @@
 
 <dom-module id="jp-ajax">
     <template>
-        <iron-ajax url="[[urlBase]]/[[url]]" params="[[params]]" method="[[method]]" headers="[[headers]]" content-type="[[contentType]]"
+        <iron-ajax id="ironAjax" url="[[urlBase]]/[[url]]" params="[[params]]" method="[[method]]" headers="[[headers]]" content-type="[[contentType]]"
         body="[[body]]" sync="[[sync]]" handle-as="[[handleAs]]"  auto="[[auto]]" loading="{{loading}}"
-        last-response="{{lastResponse}}" last-error="{{lastError}}"></iron-ajax>>
+        last-response="{{lastResponse}}" last-error="{{lastError}}"></iron-ajax>
         </iron-ajax>
     </template>
 
@@ -48,7 +48,7 @@
             }
 
             generateRequest() {
-                this.$.ironAjax.generateRequest();
+                return this.$.ironAjax.generateRequest();
             }
         }
         customElements.define(JpAjax.is,JpAjax);

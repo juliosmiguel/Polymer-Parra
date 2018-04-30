@@ -1,0 +1,46 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="../core/ajax/jp-ajax.html">
+<link rel="import" href="../core/store/jp-store.html">
+
+<dom-module id="jp-app-user-store">
+    <template>
+            <jp-ajax id="loginAjax" url="login" params='' handle-as="json" on-response="_onResponse" debounce-duration="300"
+            last-response="[[last-response]]" on-error="_onError"></jp-ajax>
+            <jp-store state="[[state]]"></jp-store>
+    </template>
+    <script>
+        class JpAppUserStore extends JpStoreMixin(Polymer.Element){
+            static get is(){return "jp-app-user-store";}
+            static get properties(){
+                return{
+                    entity: {
+                        type:String,
+                        value:'user',
+                        readOnly:true
+                    }   
+                };
+            }
+
+            _onResponse(){
+                this.save(this.$.loginAjax.lastResponse);
+                this.dispatchEvent(new CustomEvent('jp-user-store-response', {
+                    bubbles: true,
+                    composed: true
+                }));
+            }
+
+            _onError(){
+                this.dispatchEvent(new CustomEvent('jp-user-store--error', {
+                    bubbles: true,
+                    composed: true
+                }));
+            }
+            
+            generateRequest() {
+                return this.$.loginAjax.generateRequest();
+            }
+
+        }
+        customElements.define(JpAppUserStore.is, JpAppUserStore);
+    </script>
+</dom-module>

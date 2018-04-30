@@ -3,20 +3,19 @@
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/iron-form/iron-form.html">
 <link rel="import" href="../core/styles/jp-styles.html">
+<link rel="import" href="../users/jp-app-user-store.html">
 
 <dom-module id="jp-app-login">
     <template>
         <style include="jp-styles">
         
         </style>
-        <iron-ajax id="loginAjax" url="[[urlLogin]]" params='' handle-as="json" on-response="_onResponse" debounce-duration="300"></iron-ajax>
-        <!--iron-form id="formLogin" allow-redirect=true on-iron-form-presubmit="_onPreSubmit"-->
-            <form id="formLogin" method="get" action="/#/home">
-                <paper-input label="Usuario" id="idUsuarioJp" maxlength="10" minlength="8"></paper-input>
-                <paper-input label="Password" type="password" id="passwordJp" maxlength="10" minlength="6"></paper-input>
-                <paper-button raised on-click="_login">Login</paper-button>
-            </form>
-        <!--/iron-form-->
+        <jp-app-user-store id="userStore"></jp-app-user-store>
+        <form id="formLogin" method="get" action="/#/home">                
+            <paper-input label="Usuario" id="idUsuarioJp" maxlength="10" minlength="8"></paper-input>
+            <paper-input label="Password" type="password" id="passwordJp" maxlength="10" minlength="6"></paper-input>
+            <paper-button raised on-click="_login">Login</paper-button>
+        </form>
     </template>
     <script>
         class JpAppLogin extends Polymer.Element {
@@ -25,10 +24,16 @@
                 return {
                     urlLogin: {
                         type:String,
-                        value: Application.getUrlBase() + '/login'
+                        value: 'login'
                     },
                     data: Object
                 };
+            }
+            ready(){
+                super.ready();
+                addEventListener("jp-user-store-response", this._onResponse.bind(this));
+                addEventListener("jp-user-store-error", this._onError.bind(this));
+                
             }
 
             _onPreSubmit(){
@@ -37,19 +42,15 @@
 
             _login(){
                 console.log('_login');
-                this.$.loginAjax.params=`{"usuario":"${this.$.idUsuarioJp.value}", "password":"${this.$.passwordJp.value}"}`;
-                let ajaxRequest = this.$.loginAjax.generateRequest();
-                
-                ajaxRequest.completes.then((request)=>{
-                        console.log(`onResponse: ${JSON.stringify(request.response)}`);
-                        Application.setUsuario(request.response);
-                        this.$.formLogin.submit();
-                    },
-                    (request)=>{
-                        console.log("errorLogin");
-                        alert("Datos introducidos erroneos");
-                    }
-                );
+                this.$.userStore.generateRequest();
+            }
+            _onResponse(){
+                this.$.formLogin.submit();
+            }
+
+            _onError(){
+                console.log("errorLogin");
+                alert("Datos introducidos erroneos");
             }
         }
 
