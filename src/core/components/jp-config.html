@@ -1,22 +1,31 @@
 <script>
-var application = (function(){
-    config = {
+var Application = (function(){
+    _config = {
         urlBase : 'http://localhost:3000'
     };
-    services = {
+    _services = {
 
     };
+    _usuario={}
     return{
         getUrlBase: function(){
-            return config.urlBase;
+            return _config.urlBase;
         },
 
         getConfig: function(){
-            return config;
+            return _config;
         },
 
         getServices: function(){
-            return services;
+            return _services;
+        },
+
+        getUsuario: function(){
+            return _usuario;
+        },
+
+        setUsuario: function(usuario){
+            _usuario = usuario;
         }
     }
 }());

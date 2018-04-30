@@ -4,7 +4,11 @@
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "paper-input": "PolymerElements/paper-input#^2.2.2",
-    "iron-icon": "PolymerElements/iron-icon#^2.1.0"
+    "iron-icon": "PolymerElements/iron-icon#^2.1.0",
+    "paper-button": "^2.1.1",
+    "iron-form": "^2.3.0",
+    "iron-lazy-pages": "^2.1.1",
+    "app-layout": "^2.1.0"
   },
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0",

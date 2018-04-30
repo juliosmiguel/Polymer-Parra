@@ -1,0 +1,176 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="./director.html">
+<script>
+    (function () {
+
+        const WILDCARD = '?((\w|.)*)';
+        const ROUTER_CONFIG = {
+            /**
+             * Use hash routes
+             */
+            html5history: false,
+        };
+
+        JpRoutingMixin = (superClass) => {
+            return class extends superClass {
+                static get properties() {
+                    return {
+                        /**
+                         * Current active page 
+                         */
+                        page: {
+                            type: String,
+                            observer: '_pageChanged'
+                        },
+                        /**
+                         * Routes array configuration
+                         */
+                        routes: Array,
+                        /**
+                         * Base path to prepend the routes wth
+                         */
+                        base: String,
+                        /**
+                         * Route context
+                         */
+                        params: Object,
+                    };
+                }
+                /**
+                 * Everytime a component implementing this mixin is connected
+                 * it will setupt the router and its routes
+                 */
+                connectedCallback() {
+                    super.connectedCallback();
+                    this._createRouter();
+                    this._setupRoutes();
+                    this._initRouter();
+                }
+                disconnectedCallback() {
+                    super.disconnectedCallback();
+                    this._removeRouter();
+                }
+                /**
+                 * Creates a new instance of the router
+                 */
+                _createRouter() {
+                    this.router = new Router().configure(ROUTER_CONFIG);
+                    Router.setRoute = this.router.setRoute.bind(this.router);
+                }
+                /**
+                 * Configures the different routes attending to its type
+                 */
+                _setupRoutes() {
+                    this.routes.forEach((route) => {
+                        if (route.fallback) {
+                            this._createFallback(route);
+                        } else if (route.hasChildren) {
+                            this._createRouteWithChildren(route);
+                        } else {
+                            this._createRoute(route);
+                        }
+                    });
+                }
+                /**
+                 * Routes configured with `fallback:true` will rendered when
+                 * no other route matches.
+                 */
+                _createFallback(route) {
+                    this.router.notfound = () => {
+                        this.page = route.page;
+                    }
+                }
+                /**
+                 * In order to be able to lazy load routing modules,
+                 * the ones identified with `hasChildren:true`, we need
+                 * to create two different routes for each one of them.
+                 * 
+                 * One route will exactly match the module, for loading
+                 * it and navigating to its default page.
+                 * 
+                 * The second route ends with WILDCARD, so if navigating
+                 * directly to a lazy loaded module route, without loading it
+                 * first, it gets first loaded so its route becomes available.
+                 */
+                _createRouteWithChildren(route) {
+                    this.router.on(`${this._addBase(route.path)}/${WILDCARD}`, () => {
+                        if (this.page !== route.page) {
+                            this.page = route.page;
+                        }
+                    });
+                }
+                /**
+                 * When a final route is matched, we store its possible
+                 * parameters which later can be accessed in matching
+                 * order. 
+                 */
+                _createRoute(route) {
+                    this.router.on(this._addBase(route.path), (...params) => {
+                        this.setProperties({page: route.page, params});
+                    });
+                }
+                /**
+                 * Initialize the router after it has been configured
+                 */
+                _initRouter() {
+                    this.router.init();
+                }
+                _removeRouter() {
+                    this.router.destroy();
+                    this.router = null;
+                }
+                /**
+                  * Add the base path if any to the newly created routes
+                  */
+                _addBase(path) {
+                    if (!this.base) {
+                        return path;
+                    }
+                    return `${this.base}${path}`;
+                }
+                /**
+                 * When there is a page change we check if the route that represents
+                 * it is flagged as `default`, if it is, we assume it is already loaded
+                 * and do nothing. Otherwise we import the component that represents the
+                 * page dynamically.
+                 */
+                _pageChanged() {
+                    if (this._findRouteByPage(this.page).default) {
+                        return;
+                    }
+                    const componentPath = this._resolveComponent(this.page);
+                    Polymer.importHref(
+                        this.resolveUrl(componentPath),
+                        null, null, true
+                    );
+                }
+                /**
+                 * Given a page, returns its component definition route.
+                 */
+                _resolveComponent(page) {
+                    const route = this._findRouteByPage(page);
+                    if (!route) {
+                        return (this._getFallbackRoute() || {}).load;
+                    }
+                    return route.load;
+                }
+                /**
+                 * Given a page, returns its route.
+                 */
+                _findRouteByPage(page) {
+                    return this.routes.find((route) => {
+                        return route.page === page;
+                    });
+                }
+                /**
+                 * Returns the route flagged as fallback.
+                 */
+                _getFallbackRoute() {
+                    return this.routes.find((route) => {
+                        return route.fallback;
+                    });
+                }
+            }
+        };
+    }());
+</script>

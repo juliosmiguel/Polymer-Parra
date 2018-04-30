@@ -1,0 +1,57 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="jp-ajax">
+    <template>
+        <iron-ajax url="[[urlBase]]/[[url]]" params="[[params]]" method="[[method]]" headers="[[headers]]" content-type="[[contentType]]"
+        body="[[body]]" sync="[[sync]]" handle-as="[[handleAs]]"  auto="[[auto]]" loading="{{loading}}"
+        last-response="{{lastResponse}}" last-error="{{lastError}}"></iron-ajax>>
+        </iron-ajax>
+    </template>
+
+    <script>
+        class JpAjax extends Polymer.Element{
+            static get is(){return "jp-ajax";}
+            static get properties(){
+                return{
+                    urlBase: {
+                        type: String,
+                        value: Application.getUrlBase()
+                    },
+                    url: String,
+                    params: Object,
+                    method: String,
+                    headers: Object,
+                    contentType: {
+                        type: String,
+                        value: 'application/json'
+                    },
+                    body: Object,
+                    handleAs: String,
+                    auto: Boolean,
+                    loading: {
+                    type: Boolean,
+                        notify: true,
+                    },
+                    lastResponse: {
+                        type: Object,
+                        notify: true                        },
+                    lastError: {
+                        type: Object,
+                        notify: true
+                    },
+                    sync: {
+                        type: Boolean,
+                        value: false
+                    }
+                };
+            }
+
+            generateRequest() {
+                this.$.ironAjax.generateRequest();
+            }
+        }
+        customElements.define(JpAjax.is,JpAjax);
+    </script>
+
+</dom-module>

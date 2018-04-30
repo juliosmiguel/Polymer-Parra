@@ -1,16 +1,24 @@
 {
-  "posts": [
-    {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
+  "login": {
+    "id":1,
+    "nombre":"Julio",
+    "apellidos":"Sanz de Miguel",
+    "perfil": {
+      "id":0,
+      "descripcion":"Administrador"
+    },
+    "menu":[]
+  },
   "comments": [
     {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
+      "id":1,
+    "nombre":"Julio",
+    "apellidos":"Sanz de Miguel",
+    "perfil": {
+      "id":0,
+      "descripcion":"Administrador"
+    },
+    "menu":[]
     }
   ],
   "profile": {

@@ -1,0 +1,87 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<!-- 
+    Layout styles of our app for using flex,
+    if we want to share styles we must wrap them
+    in a dom-module and give it an id, then in
+    other modules we can do:
+    <style include="some-id">
+ -->
+<dom-module id="jp-layout">
+    <template>
+        <style>
+            .flex,
+            .horizontal,
+            .vertical,
+            .vertical-fill {
+                display: flex;
+            }
+
+            .horizontal {
+                flex-direction: row;
+            }
+
+            .vertical,
+            .vertical-fill {
+                flex-direction: column;
+            }
+
+            .fill,
+            .vertical-fill {
+                height: 100%;
+            }
+
+            .none {
+                flex: none;
+            }
+
+            .one {
+                flex: 1;
+            }
+
+            .two {
+                flex: 2;
+            }
+
+            .three {
+                flex: 3;
+            }
+
+            .four {
+                flex: 4;
+            }
+
+            .five {
+                flex: 5;
+            }
+
+            .six {
+                flex: 6;
+            }
+
+            .seven {
+                flex: 7
+            }
+
+            .eight {
+                flex: 8
+            }
+
+            .nine {
+                flex: 9
+            }
+
+            .ten {
+                flex: 10;
+            }
+
+            .eleven {
+                flex: 11;
+            }
+
+            .twelve {
+                flex: 12
+            }
+        </style>
+    </template>
+</dom-module>

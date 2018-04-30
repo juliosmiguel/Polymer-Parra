@@ -1,0 +1,36 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/iron-lazy-pages/iron-lazy-pages.html">
+<link rel="import" href="../core/routing/jp-routing-mixin.html">
+<link rel="import" href="./jp-app-login.html">
+
+<dom-module id="jp-app-login-routing">
+    <template>
+            <iron-lazy-pages role="login" selected="[[page]]" attr-for-selected="name">
+                <template name="login" is="dom-if" restamp>
+                    <jp-app-login></jp-app-login>
+                </template>
+            </iron-lazy-pages>
+
+    </template>
+
+    <script>
+        class JpAppLoginRouting extends JpRoutingMixin(Polymer.Element){
+            static get is(){ return "jp-app-login-routing";}
+            static get properties(){
+                return {
+                    routes :{
+                        type: Array,
+                        value: () => [
+                            {path: '/', page: 'login', default: true},
+                            {path: '/home', page: 'home', load: 'pizza/jp-app-principal.html', hasChildren: true},
+                            {page: 'fallback', load: 'core/pages/ps-not-found.html', fallback: true}
+                        ],
+                        readOnly: true
+                    }
+                }
+            }
+        }
+        customElements.define(JpAppLoginRouting.is, JpAppLoginRouting);
+        
+    </script>
+</dom-module>

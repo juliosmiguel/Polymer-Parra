@@ -1,0 +1,66 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<dom-module id="jp-routes">
+    <template>
+        <style>
+            /** 
+             * Before the component is defined, we can 
+             * use the :not(:defined) selector to build
+             * a layout that resembles the component.
+             *
+             * This selector is not polyfilled, so an alternative
+             * can be to use an attribute inactive, and remove it
+             * on the connectedCallback of the component.
+             */
+
+            iron-lazy-pages>*:not(:defined) {
+                display: block;
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                width: 5rem;
+                height: 5rem;
+                background-color: var(--color-secondary);
+                -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+                animation: sk-rotateplane 1.2s infinite ease-in-out;
+            }
+
+            @-webkit-keyframes sk-rotateplane {
+                0% {
+                    -webkit-transform: perspective(120px)
+                }
+                50% {
+                    -webkit-transform: perspective(120px) rotateY(180deg)
+                }
+                100% {
+                    -webkit-transform: perspective(120px) rotateY(180deg) rotateX(180deg)
+                }
+            }
+
+            @keyframes sk-rotateplane {
+                0% {
+                    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+                    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+                }
+                50% {
+                    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+                    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+                }
+                100% {
+                    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+                    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+                }
+            }
+
+            /**
+             * If we wan't our components to occupy all the content
+             * available we must set iron-lazy-pages and te current
+             * selected component height to 100%
+             */
+
+            iron-lazy-pages,
+            .iron-lazy-selected {
+                height: 100%;
+            }
+        </style>
+    </template>
+</dom-module>
